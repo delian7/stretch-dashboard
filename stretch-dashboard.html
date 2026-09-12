@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>Stretch Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --ink: #172321;
+        --muted: #5f6d68;
+        --paper: #f6f7f2;
+        --surface: #ffffff;
+        --line: #d8ded8;
+        --moss: #2e6552;
+        --moss-dark: #214b3d;
+        --mint: #dcece2;
+        --sun: #efb24c;
+        --coral: #df7459;
+        --shadow: 0 20px 60px rgba(34, 64, 53, 0.10);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-width: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "IBM Plex Sans", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      button { font: inherit; }
+      button:focus-visible { outline: 3px solid rgba(239, 178, 76, .7); outline-offset: 3px; }
+      .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0 72px; }
+
+      .top-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(280px, .7fr);
+        gap: 22px;
+        align-items: stretch;
+      }
+      .intro {
+        padding: 30px 34px 34px;
+        background: var(--ink);
+        color: #f8fbf6;
+        border-radius: 26px 26px 8px 26px;
+        min-height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+      .intro::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        right: -70px;
+        bottom: -90px;
+        border: 34px solid rgba(239, 178, 76, .26);
+        border-radius: 50%;
+      }
+      .eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 42px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: #bcd2c6;
+      }
+      .eyebrow-dot { width: 8px; height: 8px; background: var(--sun); border-radius: 50%; }
+      h1 { margin: 0; max-width: 700px; font-size: clamp(38px, 6vw, 70px); line-height: .98; letter-spacing: -.045em; font-weight: 600; }
+      .intro-copy { margin: 22px 0 0; max-width: 600px; font-size: 17px; line-height: 1.55; color: #d8e2dc; }
+
+      .today-card {
+        padding: 28px;
+        background: var(--mint);
+        border-radius: 8px 26px 26px 26px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .today-label { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--moss); }
+      .today-card h2 { margin: 14px 0 10px; font-size: 30px; line-height: 1.08; letter-spacing: -.03em; }
+      .today-card p { margin: 0; color: #3e514b; line-height: 1.5; }
+      .today-meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 22px 0; }
+      .meta-chip { background: rgba(255,255,255,.7); padding: 8px 11px; border-radius: 999px; font-size: 13px; color: var(--moss-dark); }
+
+      .primary,
+      .secondary,
+      .icon-btn {
+        border: 0;
+        cursor: pointer;
+        transition: background .18s ease, transform .18s ease;
+      }
+      .primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        width: 100%;
+        background: var(--moss);
+        color: white;
+        padding: 15px 17px;
+        border-radius: 12px;
+        font-weight: 600;
+      }
+      .primary:hover { background: var(--moss-dark); }
+      .primary:active, .secondary:active, .icon-btn:active { transform: translateY(1px); }
+      .arrow { font-size: 20px; line-height: 1; }
+
+      .routine-area { margin-top: 44px; }
+      .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 18px; }
+      .section-head h2 { font-size: 28px; margin: 0; letter-spacing: -.025em; }
+      .section-head p { margin: 7px 0 0; color: var(--muted); }
+      .tabs { display: inline-flex; padding: 4px; background: #e7eae4; border-radius: 12px; }
+      .tab {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        padding: 9px 14px;
+        border-radius: 9px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .tab[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 3px 12px rgba(31,44,40,.08); }
+
+      .stretch-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+      .stretch-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 20px 8px 20px 20px;
+        padding: 20px;
+        min-width: 0;
+      }
+      .stretch-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+      .figure {
+        width: 74px;
+        height: 74px;
+        flex: 0 0 74px;
+        background: #edf3ed;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: var(--moss);
+      }
+      .figure svg { width: 56px; height: 56px; }
+      .number { font-family: "IBM Plex Mono", monospace; color: #89928e; font-size: 12px; }
+      .stretch-card h3 { margin: 18px 0 8px; font-size: 19px; letter-spacing: -.015em; }
+      .stretch-card p { margin: 0; color: var(--muted); line-height: 1.45; font-size: 14px; }
+      .stretch-foot { margin-top: 18px; display: flex; justify-content: space-between; gap: 10px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--moss); }
+
+      .guardrail {
+        margin-top: 26px;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        padding: 20px 2px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 16px;
+        align-items: center;
+      }
+      .guard-icon { width: 38px; height: 38px; border-radius: 50%; background: #fde7df; color: #9a432e; display: grid; place-items: center; font-weight: 600; }
+      .guardrail strong { display: block; margin-bottom: 3px; }
+      .guardrail span { color: var(--muted); font-size: 14px; line-height: 1.45; }
+      .guard-note { font-family: "IBM Plex Mono", monospace; font-size: 11px !important; color: #8b5a4e !important; }
+
+      .session {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        background: rgba(13, 27, 23, .78);
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .2s ease, visibility .2s ease;
+      }
+      .session.open { opacity: 1; visibility: visible; }
+      .session-panel {
+        width: min(720px, 100%);
+        max-height: min(760px, calc(100vh - 36px));
+        overflow: auto;
+        background: var(--surface);
+        border-radius: 28px 28px 10px 28px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+      }
+      .session-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+      .session-kicker { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--moss); }
+      .session-actions { display: flex; align-items: center; gap: 8px; }
+      .sound-toggle {
+        border: 0;
+        border-radius: 999px;
+        padding: 9px 12px;
+        background: #eef0eb;
+        color: var(--moss-dark);
+        font: 500 12px "IBM Plex Mono", monospace;
+        cursor: pointer;
+      }
+      .sound-toggle[aria-pressed="false"] { color: var(--muted); }
+      .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: #eef0eb; color: var(--ink); font-size: 22px; }
+      .progress-track { height: 7px; background: #e4e8e2; border-radius: 999px; margin: 24px 0 30px; overflow: hidden; }
+      .progress-bar { height: 100%; background: var(--sun); width: 0; border-radius: inherit; transition: width .35s linear; }
+      .active-layout { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 28px; align-items: center; }
+      .big-figure {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--mint);
+        color: var(--moss);
+      }
+      .big-figure svg { width: 148px; height: 148px; }
+      .active-copy h2 { margin: 8px 0 10px; font-size: 34px; line-height: 1.05; letter-spacing: -.035em; }
+      .active-copy p { margin: 0; color: var(--muted); line-height: 1.55; }
+      .timer { margin: 22px 0 4px; font-family: "IBM Plex Mono", monospace; font-size: 46px; line-height: 1; color: var(--moss); }
+      .cue { margin-top: 18px; padding: 13px 14px; background: #f2f4ef; border-radius: 10px; font-size: 14px; color: #42534e; }
+      .demo-strip {
+        margin-top: 22px;
+        padding: 14px 16px;
+        display: grid;
+        grid-template-columns: 70px minmax(0, 1fr);
+        gap: 14px;
+        align-items: center;
+        background: #f7f8f4;
+        border: 1px solid var(--line);
+        border-radius: 14px 6px 14px 14px;
+      }
+      .demo-figure {
+        width: 70px;
+        height: 70px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--mint);
+        color: var(--moss);
+        overflow: hidden;
+      }
+      .demo-figure svg { width: 52px; height: 52px; transform-origin: 50% 55%; }
+      .demo-label { font: 500 11px "IBM Plex Mono", monospace; color: var(--moss); }
+      .demo-copy { margin: 5px 0 0; color: var(--muted); font-size: 13px; line-height: 1.45; }
+      .demo-sound { display: block; margin-top: 4px; color: #78847f; }
+      .demo-figure[data-motion="breathe"] svg { animation: demo-breathe 4s ease-in-out infinite; }
+      .demo-figure[data-motion="neck"] svg,
+      .demo-figure[data-motion="twist"] svg,
+      .demo-figure[data-motion="sidebend"] svg { animation: demo-turn 3.2s ease-in-out infinite; }
+      .demo-figure[data-motion="chest"] svg,
+      .demo-figure[data-motion="reach"] svg { animation: demo-open 3.6s ease-in-out infinite; }
+      .demo-figure[data-motion="hamstring"] svg,
+      .demo-figure[data-motion="figure4"] svg,
+      .demo-figure[data-motion="strap"] svg,
+      .demo-figure[data-motion="legsup"] svg { animation: demo-settle 3.8s ease-in-out infinite; }
+      @keyframes demo-breathe { 0%, 100% { transform: scale(.92); opacity: .78; } 50% { transform: scale(1.04); opacity: 1; } }
+      @keyframes demo-turn { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+      @keyframes demo-open { 0%, 100% { transform: translateY(2px) scale(.97); } 50% { transform: translateY(-2px) scale(1.03); } }
+      @keyframes demo-settle { 0%, 100% { transform: translateX(-2px); } 50% { transform: translateX(2px); } }
+      .controls { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 10px; margin-top: 22px; }
+      .secondary { background: #edf0ea; color: var(--ink); padding: 13px; border-radius: 10px; font-weight: 600; }
+      .secondary:hover { background: #e2e6df; }
+      .session .primary { justify-content: center; }
+      .done { text-align: center; padding: 24px 0 10px; }
+      .done-mark { width: 92px; height: 92px; margin: 0 auto 20px; background: var(--mint); border-radius: 50%; display: grid; place-items: center; color: var(--moss); font-size: 42px; }
+      .done h2 { font-size: 38px; margin: 0 0 10px; letter-spacing: -.035em; }
+      .done p { color: var(--muted); margin: 0 auto 24px; max-width: 430px; line-height: 1.55; }
+      .done .primary { max-width: 240px; margin: 0 auto; }
+      .hidden { display: none !important; }
+
+      @media (max-width: 900px) {
+        .top-grid { grid-template-columns: 1fr; }
+        .intro { min-height: 320px; }
+        .stretch-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      }
+      @media (max-width: 640px) {
+        .shell { width: min(100% - 24px, 1180px); padding: 18px 0 42px; }
+        .intro { padding: 24px; min-height: 340px; border-radius: 20px 20px 6px 20px; }
+        .eyebrow { margin-bottom: 36px; }
+        h1 { font-size: 43px; }
+        .intro-copy { font-size: 15px; }
+        .today-card { padding: 22px; }
+        .routine-area { margin-top: 34px; }
+        .section-head { align-items: flex-start; flex-direction: column; }
+        .tabs { width: 100%; }
+        .tab { flex: 1; }
+        .stretch-grid { grid-template-columns: 1fr; }
+        .stretch-card { display: grid; grid-template-columns: 68px 1fr; column-gap: 14px; }
+        .stretch-top { grid-row: 1 / span 3; }
+        .figure { width: 62px; height: 62px; flex-basis: 62px; }
+        .figure svg { width: 48px; height: 48px; }
+        .number { display: none; }
+        .stretch-card h3 { margin: 2px 0 7px; }
+        .stretch-foot { margin-top: 12px; }
+        .guardrail { grid-template-columns: auto 1fr; }
+        .guard-note { grid-column: 2; }
+        .session-panel { padding: 22px; border-radius: 22px 22px 8px 22px; }
+        .active-layout { grid-template-columns: 1fr; text-align: center; gap: 18px; }
+        .big-figure { width: 150px; height: 150px; margin: 0 auto; }
+        .big-figure svg { width: 112px; height: 112px; }
+        .active-copy h2 { font-size: 29px; }
+        .timer { font-size: 40px; }
+        .cue { text-align: left; }
+        .session-head { align-items: flex-start; }
+        .session-kicker { padding-top: 10px; }
+        .sound-toggle { padding: 8px 10px; }
+        .demo-strip { text-align: left; grid-template-columns: 58px minmax(0, 1fr); padding: 12px; }
+        .demo-figure { width: 58px; height: 58px; }
+        .demo-figure svg { width: 44px; height: 44px; }
+        .controls { grid-template-columns: 1fr 1fr; }
+        .controls .primary { grid-column: 1 / -1; grid-row: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="top-grid" aria-labelledby="main-title">
+        <div class="intro">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span><span>ONE GENTLE RESET · 5 MINUTES</span></div>
+            <h1 id="main-title">Move a little.<br />Feel a lot better.</h1>
+          </div>
+          <p class="intro-copy">A calm, ankle-friendly stretch sequence for the neck, back, hips, and hamstrings—without turning mobility into a project.</p>
+        </div>
+
+        <aside class="today-card" aria-live="polite">
+          <div>
+            <span class="today-label" id="time-label">TODAY’S SUGGESTION</span>
+            <h2 id="suggestion-title">Morning reset</h2>
+            <p id="suggestion-copy">Start loose: five quiet minutes before the day gets loud.</p>
+          </div>
+          <div>
+            <div class="today-meta">
+              <span class="meta-chip">5 minutes</span>
+              <span class="meta-chip">6 movements</span>
+              <span class="meta-chip">No ankle loading</span>
+            </div>
+            <button class="primary" id="start-suggested" type="button">
+              <span>Start this session</span><span class="arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="routine-area" aria-labelledby="routine-title">
+        <div class="section-head">
+          <div>
+            <h2 id="routine-title">Your sequence</h2>
+            <p id="routine-description">Wake up the upper body and hips, gently.</p>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Choose stretch routine">
+            <button class="tab" id="morning-tab" role="tab" aria-selected="true" type="button">Morning</button>
+            <button class="tab" id="night-tab" role="tab" aria-selected="false" type="button">Night</button>
+          </div>
+        </div>
+
+        <div class="stretch-grid" id="stretch-grid"></div>
+
+        <div class="guardrail">
+          <div class="guard-icon" aria-hidden="true">!</div>
+          <div>
+            <strong>Right ankle rule</strong>
+            <span>Keep it neutral and unloaded. Stop if you feel sharp pain, joint pinching, new swelling, or numbness.</span>
+          </div>
+          <span class="guard-note">COMFORTABLE RANGE ONLY</span>
+        </div>
+      </section>
+    </main>
+
+    <div class="session" id="session"></div>
+    <template id="session-template">
+      <div class="session-panel" role="dialog" aria-modal="true" aria-labelledby="active-title">
+        <div class="session-head">
+          <span class="session-kicker" id="session-kicker">MORNING · STEP 1 OF 6</span>
+          <div class="session-actions">
+            <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="true" aria-label="Turn timer sounds off">Sound on</button>
+            <button class="icon-btn" id="close-session" type="button" aria-label="End session">×</button>
+          </div>
+        </div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progress-bar"></div></div>
+
+        <div id="active-view">
+          <div class="active-layout">
+            <div class="big-figure" id="active-figure" aria-hidden="true"></div>
+            <div class="active-copy">
+              <span class="today-label" id="active-area">BREATHE</span>
+              <h2 id="active-title">Breathing reset</h2>
+              <p id="active-instruction">Sit tall. Let your shoulders soften as you breathe slowly through your nose.</p>
+              <div class="timer" id="timer">0:30</div>
+              <div class="cue" id="active-cue">Cue: Inhale for 4, exhale for 6.</div>
+            </div>
+          </div>
+          <div class="demo-strip" aria-label="Animated movement preview">
+            <div class="demo-figure" id="demo-figure" aria-hidden="true"></div>
+            <div>
+              <span class="demo-label">LOOPING DEMO</span>
+              <p class="demo-copy" id="demo-copy">Move slowly with the animation.<span class="demo-sound">One soft tone at halfway; a two-tone cue when it’s time to switch.</span></p>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="secondary" id="back-step" type="button">Back</button>
+            <button class="primary" id="pause-step" type="button">Pause</button>
+            <button class="secondary" id="next-step" type="button">Next</button>
+          </div>
+        </div>
+
+        <div class="done hidden" id="done-view">
+          <div class="done-mark" aria-hidden="true">✓</div>
+          <h2>That counts.</h2>
+          <p>Five minutes is enough to change the tone of the day. No streak to protect, no catching up—just come back when it feels useful.</p>
+          <button class="primary" id="finish-session" type="button">Done</button>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      const iconSvgs = {
+        breathe: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="13" r="6" stroke="currentColor" stroke-width="3"/><path d="M32 20v18m0-10-11 8m11-8 11 8M32 38l-8 15m8-15 8 15" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M18 18c-4 3-6 7-6 12m34-12c4 3 6 7 6 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+        neck: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="31" cy="13" r="6" stroke="currentColor" stroke-width="3"/><path d="M31 20v18m0-10-11 8m11-8 12 4M31 38l-8 15m8-15 8 15" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M43 9c4 2 6 5 7 9m0 0-5-2m5 2 1-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        chest: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="13" r="6" stroke="currentColor" stroke-width="3"/><path d="M32 20v18M31 28 14 20m19 8 17-8M32 38l-8 15m8-15 8 15" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M10 13v34m44-34v34" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        twist: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="31" cy="13" r="6" stroke="currentColor" stroke-width="3"/><path d="M31 20v18m0-10 13 5m-13-5-10 10M31 38l-12 10h27" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M43 17c6 2 9 7 9 12m0 0-4-3m4 3 2-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        hamstring: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="21" cy="18" r="6" stroke="currentColor" stroke-width="3"/><path d="m25 23 12 10 13 14M36 33l-15 9H8m29-9 12-2" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M8 51h48" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        figure4: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="12" cy="36" r="5" stroke="currentColor" stroke-width="3"/><path d="m17 36 16 1 12 12m-12-12 10-10m-10 10-6 12m18 0h12M43 27l10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M5 54h54" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        reach: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="14" r="6" stroke="currentColor" stroke-width="3"/><path d="M32 21v18m0-10L17 17m15 12 15-12M32 39l-9 15m9-15 9 15" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`,
+        sidebend: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="29" cy="13" r="6" stroke="currentColor" stroke-width="3"/><path d="M29 20c1 8 3 13 8 18m-5-10 12-14m-12 14-12 7m17 3-11 13m11-13 12 11" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`,
+        strap: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="12" cy="44" r="5" stroke="currentColor" stroke-width="3"/><path d="m17 44 16 1 12 9m-12-9 12-25m0 0 8 27M45 20l5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M5 57h54" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        legsup: `<svg viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="13" cy="45" r="5" stroke="currentColor" stroke-width="3"/><path d="m18 45 17 1 10-12V12m-10 34 18 8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M52 9v45M5 57h54" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`
+      };
+
+      const routines = {
+        morning: {
+          name: "Morning",
+          description: "Wake up the upper body and hips, gently.",
+          steps: [
+            { title: "Breathing reset", area: "BREATHE", seconds: 30, icon: "breathe", card: "Sit tall and soften your shoulders.", instruction: "Sit tall with both feet supported. Let your shoulders soften as you breathe slowly through your nose.", cue: "Inhale for 4, exhale for 6." },
+            { title: "Neck glide", area: "NECK", seconds: 30, icon: "neck", card: "Turn slowly, without tipping the head.", instruction: "Look gently over one shoulder, return to center, then turn the other way. Keep your chin level.", cue: "Move only as far as feels smooth—never force the range." },
+            { title: "Doorway opener", area: "CHEST", seconds: 45, icon: "chest", card: "Open the chest without leaning on the ankle.", instruction: "Rest your forearms on a doorway and take a tiny step forward with the left foot. Keep the right ankle neutral and easy.", cue: "Feel this across the chest, not in the front of the shoulder." },
+            { title: "Seated rotation", area: "MID-BACK", seconds: 60, icon: "twist", card: "Rotate from the ribs, not the low back.", instruction: "Sit tall. Cross your arms over your chest and rotate gently from the ribcage, alternating sides.", cue: "Exhale into each turn; keep both sit bones heavy." },
+            { title: "Seated hamstring", area: "HAMSTRINGS", seconds: 60, icon: "hamstring", card: "Hinge from the hips with a relaxed foot.", instruction: "Extend one leg with the heel resting lightly. Keep the ankle relaxed and hinge forward from the hips. Switch halfway.", cue: "A mild pull behind the thigh is enough." },
+            { title: "Reclined figure four", area: "HIPS", seconds: 75, icon: "figure4", card: "Unwind the hips with the ankle supported.", instruction: "Lie back and place one ankle across the opposite thigh. Draw the legs toward you without pressing on the crossed ankle. Switch halfway.", cue: "Keep the crossed foot relaxed; hold behind the thigh if needed." }
+          ]
+        },
+        night: {
+          name: "Night",
+          description: "Downshift the back, hips, and nervous system.",
+          steps: [
+            { title: "Long-exhale breathing", area: "BREATHE", seconds: 45, icon: "breathe", card: "Signal that the day is winding down.", instruction: "Lie down or sit supported. Let the belly expand quietly, then make the exhale longer than the inhale.", cue: "Inhale for 4, exhale for 6." },
+            { title: "Overhead reach", area: "SIDE BODY", seconds: 45, icon: "reach", card: "Create length without pulling hard.", instruction: "Lie on your back and reach both arms overhead. Keep the ribs soft and the lower back comfortable.", cue: "Reach long through the fingertips, not through the feet." },
+            { title: "Seated side bend", area: "RIBS", seconds: 45, icon: "sidebend", card: "Make room for a slower breath.", instruction: "Sit supported. Reach one arm overhead and arc gently to the opposite side. Switch halfway.", cue: "Keep both sit bones grounded." },
+            { title: "Hamstring with strap", area: "HAMSTRINGS", seconds: 60, icon: "strap", card: "Support the leg and relax the ankle.", instruction: "Lie back and loop a towel behind the thigh—not the foot. Ease the leg upward, then switch halfway.", cue: "Keep a soft knee and the right ankle neutral." },
+            { title: "Reclined figure four", area: "HIPS", seconds: 60, icon: "figure4", card: "A gentle hip release before sleep.", instruction: "Place one ankle across the opposite thigh and draw the legs toward you. Avoid pushing on the ankle. Switch halfway.", cue: "Let the shoulders and jaw stay loose." },
+            { title: "Legs on the sofa", area: "RESET", seconds: 45, icon: "legsup", card: "Finish still, supported, and unhurried.", instruction: "Rest your calves on a sofa or chair so the knees and hips feel supported. Let your arms fall comfortably.", cue: "Do nothing for the final few breaths." }
+          ]
+        }
+      };
+
+      let selectedRoutine = "morning";
+      let suggestedRoutine = "morning";
+      let stepIndex = 0;
+      let remaining = 0;
+      let timerId = null;
+      let paused = false;
+      let halfwayCuePlayed = false;
+      let soundEnabled = true;
+      let audioContext = null;
+
+      const grid = document.getElementById("stretch-grid");
+      const morningTab = document.getElementById("morning-tab");
+      const nightTab = document.getElementById("night-tab");
+      const session = document.getElementById("session");
+      let activeView = null;
+      let doneView = null;
+
+      function ensureAudio() {
+        if (!soundEnabled) return null;
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        if (!audioContext) audioContext = new AudioContextClass();
+        if (audioContext.state === "suspended") audioContext.resume();
+        return audioContext;
+      }
+
+      function playTone(frequency, offset = 0, duration = .12, volume = .035) {
+        const context = ensureAudio();
+        if (!context) return;
+        const start = context.currentTime + offset;
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(frequency, start);
+        gain.gain.setValueAtTime(.0001, start);
+        gain.gain.exponentialRampToValueAtTime(volume, start + .025);
+        gain.gain.exponentialRampToValueAtTime(.0001, start + duration);
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+        oscillator.start(start);
+        oscillator.stop(start + duration + .03);
+      }
+
+      function playHalfwayCue() {
+        playTone(560, 0, .15, .028);
+      }
+
+      function playSwitchCue() {
+        playTone(660, 0, .11, .032);
+        playTone(880, .14, .16, .035);
+      }
+
+      function updateSoundButton() {
+        const button = document.getElementById("sound-toggle");
+        if (!button) return;
+        button.textContent = soundEnabled ? "Sound on" : "Sound off";
+        button.setAttribute("aria-pressed", String(soundEnabled));
+        button.setAttribute("aria-label", soundEnabled ? "Turn timer sounds off" : "Turn timer sounds on");
+      }
+
+      function mountSession() {
+        session.replaceChildren(document.getElementById("session-template").content.cloneNode(true));
+        activeView = document.getElementById("active-view");
+        doneView = document.getElementById("done-view");
+        document.getElementById("close-session").addEventListener("click", closeSession);
+        document.getElementById("finish-session").addEventListener("click", closeSession);
+        document.getElementById("next-step").addEventListener("click", () => nextStep());
+        document.getElementById("back-step").addEventListener("click", backStep);
+        document.getElementById("sound-toggle").addEventListener("click", () => {
+          soundEnabled = !soundEnabled;
+          if (soundEnabled) ensureAudio();
+          updateSoundButton();
+        });
+        updateSoundButton();
+        document.getElementById("pause-step").addEventListener("click", () => {
+          paused = !paused;
+          if (paused) {
+            clearInterval(timerId);
+            document.getElementById("pause-step").textContent = "Resume";
+          } else {
+            startTimer();
+          }
+        });
+      }
+
+      function formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = String(seconds % 60).padStart(2, "0");
+        return `${m}:${s}`;
+      }
+
+      function renderRoutine(key) {
+        selectedRoutine = key;
+        const routine = routines[key];
+        document.getElementById("routine-description").textContent = routine.description;
+        morningTab.setAttribute("aria-selected", String(key === "morning"));
+        nightTab.setAttribute("aria-selected", String(key === "night"));
+        grid.innerHTML = routine.steps.map((step, i) => `
+          <article class="stretch-card">
+            <div class="stretch-top">
+              <div class="figure">${iconSvgs[step.icon]}</div>
+              <span class="number">${String(i + 1).padStart(2, "0")}</span>
+            </div>
+            <h3>${step.title}</h3>
+            <p>${step.card}</p>
+            <div class="stretch-foot"><span>${step.area}</span><span>${formatTime(step.seconds)}</span></div>
+          </article>
+        `).join("");
+      }
+
+      function setSuggestion() {
+        const hour = new Date().getHours();
+        const isMorning = hour < 12;
+        const key = isMorning ? "morning" : "night";
+        suggestedRoutine = key;
+        selectedRoutine = key;
+        document.getElementById("suggestion-title").textContent = isMorning ? "Morning reset" : "A gentle reset tonight";
+        document.getElementById("suggestion-copy").textContent = isMorning
+          ? "Start loose: five quiet minutes before the day gets loud."
+          : "Morning got away? No need to catch up—save five calm minutes for tonight.";
+        renderRoutine(key);
+      }
+
+      function updateSession() {
+        const routine = routines[selectedRoutine];
+        const step = routine.steps[stepIndex];
+        document.getElementById("session-kicker").textContent = `${routine.name.toUpperCase()} · STEP ${stepIndex + 1} OF ${routine.steps.length}`;
+        document.getElementById("active-figure").innerHTML = iconSvgs[step.icon];
+        document.getElementById("active-area").textContent = step.area;
+        document.getElementById("active-title").textContent = step.title;
+        document.getElementById("active-instruction").textContent = step.instruction;
+        document.getElementById("active-cue").textContent = `Cue: ${step.cue}`;
+        const demoFigure = document.getElementById("demo-figure");
+        demoFigure.innerHTML = iconSvgs[step.icon];
+        demoFigure.dataset.motion = step.icon;
+        document.getElementById("timer").textContent = formatTime(remaining);
+        document.getElementById("back-step").disabled = stepIndex === 0;
+        document.getElementById("next-step").textContent = stepIndex === routine.steps.length - 1 ? "Finish" : "Next";
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const steps = routines[selectedRoutine].steps;
+        const elapsedBefore = steps.slice(0, stepIndex).reduce((sum, s) => sum + s.seconds, 0);
+        const elapsedCurrent = steps[stepIndex].seconds - remaining;
+        const total = steps.reduce((sum, s) => sum + s.seconds, 0);
+        document.getElementById("progress-bar").style.width = `${Math.min(100, ((elapsedBefore + elapsedCurrent) / total) * 100)}%`;
+      }
+
+      function startTimer() {
+        clearInterval(timerId);
+        paused = false;
+        document.getElementById("pause-step").textContent = "Pause";
+        timerId = setInterval(() => {
+          remaining -= 1;
+          document.getElementById("timer").textContent = formatTime(Math.max(0, remaining));
+          updateProgress();
+          const stepSeconds = routines[selectedRoutine].steps[stepIndex].seconds;
+          if (!halfwayCuePlayed && remaining <= stepSeconds / 2 && remaining > 0) {
+            halfwayCuePlayed = true;
+            playHalfwayCue();
+          }
+          if (remaining <= 0) {
+            playSwitchCue();
+            nextStep();
+          }
+        }, 1000);
+      }
+
+      function openSession(key = selectedRoutine) {
+        ensureAudio();
+        mountSession();
+        session.style.display = "grid";
+        selectedRoutine = key;
+        stepIndex = 0;
+        remaining = routines[key].steps[0].seconds;
+        halfwayCuePlayed = false;
+        activeView.classList.remove("hidden");
+        doneView.classList.add("hidden");
+        session.classList.add("open");
+        document.body.style.overflow = "hidden";
+        updateSession();
+        startTimer();
+        document.getElementById("close-session").focus();
+      }
+
+      function closeSession() {
+        clearInterval(timerId);
+        session.classList.remove("open");
+        session.style.display = "none";
+        session.replaceChildren();
+        activeView = null;
+        doneView = null;
+        document.body.style.overflow = "";
+        document.getElementById("start-suggested").focus();
+      }
+
+      function nextStep() {
+        clearInterval(timerId);
+        const steps = routines[selectedRoutine].steps;
+        if (stepIndex >= steps.length - 1) {
+          activeView.classList.add("hidden");
+          doneView.classList.remove("hidden");
+          document.getElementById("progress-bar").style.width = "100%";
+          document.getElementById("finish-session").focus();
+          return;
+        }
+        stepIndex += 1;
+        remaining = steps[stepIndex].seconds;
+        halfwayCuePlayed = false;
+        updateSession();
+        startTimer();
+      }
+
+      function backStep() {
+        if (stepIndex === 0) return;
+        clearInterval(timerId);
+        stepIndex -= 1;
+        remaining = routines[selectedRoutine].steps[stepIndex].seconds;
+        halfwayCuePlayed = false;
+        updateSession();
+        startTimer();
+      }
+
+      morningTab.addEventListener("click", () => renderRoutine("morning"));
+      nightTab.addEventListener("click", () => renderRoutine("night"));
+      document.getElementById("start-suggested").addEventListener("click", () => openSession(suggestedRoutine));
+      session.addEventListener("click", (event) => { if (event.target === session) closeSession(); });
+      document.addEventListener("keydown", (event) => { if (event.key === "Escape" && session.classList.contains("open")) closeSession(); });
+
+      setSuggestion();
+    </script>
+  </body>
+</html>
