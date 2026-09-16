@@ -307,6 +307,50 @@
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
       }
+    
+      .workout-plan { display: grid; gap: 22px; }
+      .plan-hero { background: var(--surface); border: 1px solid var(--line); border-radius: 20px 8px 20px 20px; padding: 24px; }
+      .plan-hero .eyebrow { margin-bottom: 10px; }
+      .plan-hero h3 { margin: 0 0 10px; font-size: 26px; letter-spacing: -0.01em; }
+      .plan-hero p { margin: 0 0 8px; color: var(--muted); line-height: 1.55; }
+      .rule-callout { margin-top: 14px; background: var(--mint); border-radius: 14px; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; }
+      .rule-callout strong { display: block; margin-bottom: 4px; }
+      .rule-callout p { margin: 0; color: var(--ink); font-size: 14px; line-height: 1.5; }
+      .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      @media (max-width: 760px) { .plan-grid { grid-template-columns: 1fr; } }
+      .wk-card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px 8px 20px 20px; padding: 20px; min-width: 0; }
+      .wk-card h3 { margin: 0 0 4px; font-size: 19px; }
+      .wk-card .wk-sub { margin: 0 0 6px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+      .ex-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); }
+      .ex-row:first-of-type { border-top: 0; }
+      .ex-name { font-weight: 650; font-size: 15px; }
+      .ex-cue { display: block; font-weight: 400; color: var(--muted); font-size: 13px; margin-top: 3px; line-height: 1.45; }
+      .ex-reps { flex: none; background: var(--mint); color: var(--moss-dark); font-weight: 700; font-size: 12.5px; padding: 6px 10px; border-radius: 999px; white-space: nowrap; }
+      .wk-chip { display: inline-block; background: var(--mint); color: var(--moss-dark); font-weight: 700; font-size: 12px; padding: 5px 10px; border-radius: 999px; }
+      .sched { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+      .sched th, .sched td { text-align: left; padding: 9px 10px; border-top: 1px solid var(--line); vertical-align: top; }
+      .sched th { border-top: 0; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+      .sig { border-radius: 14px; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; font-size: 14px; line-height: 1.5; }
+      .sig strong { display: block; margin-bottom: 4px; }
+      .sig p { margin: 0; }
+      .sig.green { background: #e3f1e6; }
+      .sig.yellow { background: #fdf3dd; }
+      .sig.red { background: #fbe7e1; }
+      .sig .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; }
+      .sig.green .dot { background: #2e7d4f; } .sig.yellow .dot { background: #d99a22; } .sig.red .dot { background: #c64b33; }
+      .log-row { display: grid; grid-template-columns: 1fr auto; gap: 6px 14px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); }
+      .log-row:first-of-type { border-top: 0; }
+      .log-main { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+      .log-row.is-done .log-main strong { text-decoration: line-through; color: var(--muted); }
+      .log-check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+      .log-check input { width: 18px; height: 18px; accent-color: var(--moss); }
+      .log-ankle { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+      .log-ankle select { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 14px; background: var(--surface); color: var(--ink); }
+      .plan-list { margin: 8px 0 0; padding-left: 20px; color: var(--muted); line-height: 1.6; font-size: 14px; }
+      .plan-list li { margin-bottom: 6px; }
+      .plan-list strong { color: var(--ink); }
+      .warm-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
     </style>
   </head>
   <body>
@@ -348,10 +392,128 @@
           <div class="tabs" role="tablist" aria-label="Choose stretch routine">
             <button class="tab" id="morning-tab" role="tab" aria-selected="true" type="button">Morning</button>
             <button class="tab" id="night-tab" role="tab" aria-selected="false" type="button">Night</button>
+            <button class="tab" id="workout-tab" role="tab" aria-selected="false" type="button">Workout</button>
           </div>
         </div>
 
         <div class="stretch-grid" id="stretch-grid"></div>
+
+        <div class="workout-plan hidden" id="workout-plan">
+          <div class="plan-hero">
+            <div class="eyebrow"><span class="eyebrow-dot"></span><span>4-WEEK STARTER PLAN · ANKLE-FRIENDLY</span></div>
+            <h3>Train around the ankle, not through it.</h3>
+            <p>Two seated strength workouts, alternated across the week. No running, jumping, loaded lunges, deep loaded squats, or unstable-surface balance work &mdash; and no ankle strengthening until your surgeon or physical therapist sets your limits.</p>
+            <div class="rule-callout">
+              <div class="guard-icon" aria-hidden="true">!</div>
+              <div><strong>The one rule that matters</strong><p>Your ankle should feel the same during the workout and the next morning. More pain, swelling, catching, giving way, or limping means stop or scale back, and contact your care team.</p></div>
+            </div>
+          </div>
+
+          <div class="wk-card">
+            <h3>Weekly rhythm</h3>
+            <p class="wk-sub">Build consistency before intensity. The win is finishing without aggravating the ankle, then returning for the next session.</p>
+            <table class="sched">
+              <tr><th>Day</th><th>Week 1</th><th>Weeks 2&ndash;4</th></tr>
+              <tr><td><strong>Mon</strong></td><td>Workout A</td><td>Workout A</td></tr>
+              <tr><td><strong>Tue</strong></td><td>5-min stretch</td><td>5-min stretch + optional cleared cardio</td></tr>
+              <tr><td><strong>Wed</strong></td><td>5-min stretch</td><td>Workout B</td></tr>
+              <tr><td><strong>Thu</strong></td><td>5-min stretch</td><td>5-min stretch + optional cleared cardio</td></tr>
+              <tr><td><strong>Fri</strong></td><td>Workout B</td><td>Workout A <span style="color:var(--muted)">(swap A/B next week)</span></td></tr>
+              <tr><td><strong>Weekend</strong></td><td>One stretch day, one full rest day</td><td>One stretch day, one full rest day</td></tr>
+            </table>
+          </div>
+
+          <div class="plan-grid">
+            <div class="wk-card">
+              <h3>Before each workout &middot; 4 min</h3>
+              <ul class="plan-list">
+                <li>60 sec relaxed breathing, seated</li>
+                <li>30 sec shoulder rolls each direction</li>
+                <li>60 sec seated thoracic rotations</li>
+                <li>60 sec easy arm reaches or punches</li>
+              </ul>
+              <div class="warm-actions"><button class="secondary" type="button" data-start-stretch="morning">Start a 5-min stretch</button></div>
+            </div>
+            <div class="wk-card">
+              <h3>After each workout &middot; 3 min</h3>
+              <ul class="plan-list">
+                <li>Slow breathing until heart rate settles</li>
+                <li>Gentle seated chest stretch</li>
+                <li>Note ankle pain, swelling, and limp</li>
+              </ul>
+              <p class="wk-sub">Keep both feet supported and the injured ankle neutral and relaxed. Don&rsquo;t force ankle range of motion to &ldquo;cool down.&rdquo;</p>
+              <div class="warm-actions"><button class="secondary" type="button" data-start-stretch="night">Start a 5-min stretch</button></div>
+            </div>
+          </div>
+
+          <div class="plan-grid">
+            <div class="wk-card">
+              <h3>Workout A</h3>
+              <p class="wk-sub">2 rounds &middot; rest 45&ndash;75 sec between exercises, 90 sec between rounds &middot; leave ~3&ndash;4 reps in reserve. Stable chair without wheels, ideally backed against a wall.</p>
+              <div class="ex-row"><div><span class="ex-name">Seated band row</span><span class="ex-cue">Tall posture, feet supported; pull elbows toward ribs.</span></div><span class="ex-reps">8&ndash;12</span></div>
+              <div class="ex-row"><div><span class="ex-name">Seated chest press</span><span class="ex-cue">Band anchored securely behind you, or light dumbbell floor press.</span></div><span class="ex-reps">8&ndash;12</span></div>
+              <div class="ex-row"><div><span class="ex-name">Seated shoulder press</span><span class="ex-cue">Light weights; ribs down; no foot drive.</span></div><span class="ex-reps">8&ndash;10</span></div>
+              <div class="ex-row"><div><span class="ex-name">Dead bug</span><span class="ex-cue">On back; move opposite arm and leg; keep the ankle relaxed.</span></div><span class="ex-reps">6&ndash;8 /side</span></div>
+              <div class="ex-row"><div><span class="ex-name">Side-lying hip abduction</span><span class="ex-cue">Straight top leg, toes forward; do both sides.</span></div><span class="ex-reps">8&ndash;12 /side</span></div>
+            </div>
+            <div class="wk-card">
+              <h3>Workout B</h3>
+              <p class="wk-sub">2 rounds &middot; rest 45&ndash;75 sec between exercises, 90 sec between rounds &middot; leave ~3&ndash;4 reps in reserve. Stable chair without wheels, ideally backed against a wall.</p>
+              <div class="ex-row"><div><span class="ex-name">Seated biceps curl</span><span class="ex-cue">Band or light weights; elbows stay by sides.</span></div><span class="ex-reps">10&ndash;12</span></div>
+              <div class="ex-row"><div><span class="ex-name">Seated triceps extension</span><span class="ex-cue">Band press-down or one light weight overhead.</span></div><span class="ex-reps">10&ndash;12</span></div>
+              <div class="ex-row"><div><span class="ex-name">Seated Pallof press</span><span class="ex-cue">Band at chest height; resist rotation without bracing through feet.</span></div><span class="ex-reps">8 /side</span></div>
+              <div class="ex-row"><div><span class="ex-name">Clamshell</span><span class="ex-cue">Side-lying, knees bent; feet stay together and relaxed.</span></div><span class="ex-reps">10&ndash;15 /side</span></div>
+              <div class="ex-row"><div><span class="ex-name">Seated knee extension</span><span class="ex-cue">Straighten one knee slowly; no ankle weight; both sides.</span></div><span class="ex-reps">8&ndash;12 /side</span></div>
+            </div>
+          </div>
+
+          <div class="wk-card">
+            <h3>Stay seated if the floor is a problem</h3>
+            <p class="wk-sub">If getting down to or up from the floor makes you load, twist, or push through the injured ankle, skip the floor work: swap dead bugs for seated abdominal bracing (5 &times; 10-second holds), and side-lying work for seated band hip abduction with a light band above the knees. Stop any set if you start using the injured foot for leverage, your posture changes, or the ankle starts talking.</p>
+          </div>
+
+          <div class="wk-card">
+            <h3>Progression &middot; let symptoms set the pace</h3>
+            <p class="wk-sub">Progress only when the ankle is unchanged during training and the next morning. Change <strong>one</strong> variable at a time: repetitions, resistance, or rounds &mdash; never all three.</p>
+            <ul class="plan-list">
+              <li><strong>Week 1 &mdash; learn the pattern.</strong> Two strength sessions, two rounds each. Easy resistance, stop well before fatigue changes your form.</li>
+              <li><strong>Week 2 &mdash; establish the rhythm.</strong> Three sessions, still two rounds. Alternate A/B/A, then B/A/B the following week.</li>
+              <li><strong>Week 3 &mdash; add a little.</strong> Add 1&ndash;2 reps per set <em>or</em> the smallest resistance increase. Same number of rounds.</li>
+              <li><strong>Week 4 &mdash; consolidate.</strong> Repeat week 3. If every session stayed ankle-quiet, add a third round to only the first three exercises.</li>
+            </ul>
+            <div class="plan-grid" style="margin-top:14px">
+              <div class="sig green"><span class="dot"></span><div><strong>Green &mdash; continue</strong><p>Ankle feels at baseline during the session. No new swelling, catching, instability, or extra limp afterward or the next morning.</p></div></div>
+              <div class="sig yellow"><span class="dot"></span><div><strong>Yellow &mdash; stop and scale back</strong><p>Pain rises, swelling appears, or gait worsens. Return to the prior comfortable dose once symptoms are back at baseline; contact your clinician if it persists or recurs.</p></div></div>
+              <div class="sig red"><span class="dot"></span><div><strong>Red &mdash; get medical help</strong><p>New inability to bear weight, major swelling, locking, or repeated giving way. Chest pain, severe shortness of breath, or new calf pain/swelling needs prompt evaluation.</p></div></div>
+            </div>
+            <p class="wk-sub" style="margin-top:12px">Not progressed here: walking distance, ankle range of motion, calf raises, ankle bands, single-leg balance, bike resistance, running, jumping, or cutting. Those need lesion-specific clearance.</p>
+          </div>
+
+          <div class="wk-card">
+            <h3>Track the ankle, not just the workout</h3>
+            <p class="wk-sub">Log each strength session. A blank &ldquo;next morning&rdquo; check means the progression is not yet earned. A flare is information, not failure &mdash; log what changed, remove the newest progression, and bring the pattern to your care team.</p>
+            <div id="workout-log"></div>
+          </div>
+
+          <div class="plan-grid">
+            <div class="wk-card">
+              <h3>Ask your surgeon or PT</h3>
+              <ul class="plan-list">
+                <li>What is my current <strong>weight-bearing limit</strong>?</li>
+                <li>Which ankle motions or stretches should I <strong>avoid</strong>?</li>
+                <li>Are a stationary bike, swimming, or an arm ergometer <strong>appropriate now</strong>?</li>
+                <li>Should I use a <strong>brace, boot, orthotic,</strong> or assistive device for daily walking?</li>
+                <li>Can I begin <strong>supervised ankle strength or balance work</strong> before treatment?</li>
+                <li>Which symptoms should trigger an <strong>earlier follow-up</strong>?</li>
+              </ul>
+            </div>
+            <div class="wk-card">
+              <h3>Cardio, carefully</h3>
+              <p class="wk-sub"><strong>Optional cardio means clinician-cleared cardio only.</strong> A hand-cycle / arm ergometer is the most ankle-sparing option. Swimming or a stationary bike can still load or move the ankle &mdash; don&rsquo;t assume either is safe for your lesion.</p>
+            </div>
+          </div>
+        </div>
+
 
         <div class="guardrail">
           <div class="guard-icon" aria-hidden="true">!</div>
@@ -521,6 +683,8 @@ const demoGifs = {
       const grid = document.getElementById("stretch-grid");
       const morningTab = document.getElementById("morning-tab");
       const nightTab = document.getElementById("night-tab");
+      const workoutTab = document.getElementById("workout-tab");
+      const workoutPlan = document.getElementById("workout-plan");
       const session = document.getElementById("session");
       let activeView = null;
       let doneView = null;
@@ -605,6 +769,9 @@ const demoGifs = {
         document.getElementById("routine-description").textContent = routine.description;
         morningTab.setAttribute("aria-selected", String(key === "morning"));
         nightTab.setAttribute("aria-selected", String(key === "night"));
+        workoutTab.setAttribute("aria-selected", "false");
+        workoutPlan.classList.add("hidden");
+        grid.classList.remove("hidden");
         grid.innerHTML = routine.library.map((step, i) => `
           <article class="stretch-card">
             <div class="stretch-top">
@@ -734,8 +901,73 @@ const demoGifs = {
         startTimer();
       }
 
+      function renderWorkout() {
+        document.getElementById("routine-description").textContent = "Two ankle-quiet strength sessions, alternated across four weeks.";
+        morningTab.setAttribute("aria-selected", "false");
+        nightTab.setAttribute("aria-selected", "false");
+        workoutTab.setAttribute("aria-selected", "true");
+        grid.classList.add("hidden");
+        workoutPlan.classList.remove("hidden");
+      }
+
+      var WORKOUT_SESSIONS = [
+        { id: "w1a", label: "Week 1 \u00b7 Mon", workout: "A" },
+        { id: "w1b", label: "Week 1 \u00b7 Fri", workout: "B" },
+        { id: "w2a", label: "Week 2 \u00b7 Mon", workout: "A" },
+        { id: "w2b", label: "Week 2 \u00b7 Wed", workout: "B" },
+        { id: "w2c", label: "Week 2 \u00b7 Fri", workout: "A" },
+        { id: "w3a", label: "Week 3 \u00b7 Mon", workout: "B" },
+        { id: "w3b", label: "Week 3 \u00b7 Wed", workout: "A" },
+        { id: "w3c", label: "Week 3 \u00b7 Fri", workout: "B" },
+        { id: "w4a", label: "Week 4 \u00b7 Mon", workout: "A" },
+        { id: "w4b", label: "Week 4 \u00b7 Wed", workout: "B" },
+        { id: "w4c", label: "Week 4 \u00b7 Fri", workout: "A" }
+      ];
+      var WORKOUT_LOG_KEY = "sd-workout-log-v1";
+      function loadWorkoutLog() {
+        try { return JSON.parse(localStorage.getItem(WORKOUT_LOG_KEY) || "{}"); }
+        catch (e) { return {}; }
+      }
+      function saveWorkoutLog(log) {
+        try { localStorage.setItem(WORKOUT_LOG_KEY, JSON.stringify(log)); } catch (e) {}
+      }
+      function renderWorkoutLog() {
+        var log = loadWorkoutLog();
+        var wrap = document.getElementById("workout-log");
+        if (!wrap) return;
+        wrap.innerHTML = WORKOUT_SESSIONS.map(function (s) {
+          var e = log[s.id] || {};
+          var sel = function (v) { return e.ankle === v ? " selected" : ""; };
+          return '<div class="log-row' + (e.done ? " is-done" : "") + '">' +
+            '<div class="log-main"><strong>' + s.label + '</strong><span class="wk-chip">Workout ' + s.workout + "</span></div>" +
+            '<label class="log-check"><input type="checkbox" data-id="' + s.id + '"' + (e.done ? " checked" : "") + "> Done</label>" +
+            '<label class="log-ankle">Ankle next morning <select data-ankle="' + s.id + '">' +
+            '<option value=""' + (e.ankle ? "" : " selected") + ">\u2014</option>" +
+            '<option value="same"' + sel("same") + ">Same as baseline</option>" +
+            '<option value="worse"' + sel("worse") + ">Worse</option>" +
+            "</select></label></div>";
+        }).join("");
+        Array.prototype.forEach.call(wrap.querySelectorAll("input[type=checkbox]"), function (cb) {
+          cb.addEventListener("change", function () {
+            var l = loadWorkoutLog(); var id = cb.getAttribute("data-id");
+            l[id] = l[id] || {}; l[id].done = cb.checked; saveWorkoutLog(l); renderWorkoutLog();
+          });
+        });
+        Array.prototype.forEach.call(wrap.querySelectorAll("select"), function (selEl) {
+          selEl.addEventListener("change", function () {
+            var l = loadWorkoutLog(); var id = selEl.getAttribute("data-ankle");
+            l[id] = l[id] || {}; l[id].ankle = selEl.value; saveWorkoutLog(l);
+          });
+        });
+      }
+
       morningTab.addEventListener("click", () => renderRoutine("morning"));
       nightTab.addEventListener("click", () => renderRoutine("night"));
+      workoutTab.addEventListener("click", renderWorkout);
+      document.querySelectorAll("[data-start-stretch]").forEach(function (btn) {
+        btn.addEventListener("click", function () { openSession(btn.getAttribute("data-start-stretch")); });
+      });
+      renderWorkoutLog();
       document.getElementById("start-suggested").addEventListener("click", () => openSession(suggestedRoutine));
       session.addEventListener("click", (event) => { if (event.target === session) closeSession(); });
       document.addEventListener("keydown", (event) => { if (event.key === "Escape" && session.classList.contains("open")) closeSession(); });
