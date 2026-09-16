@@ -630,7 +630,7 @@ const demoGifs = {
 
       (function renderExerciseFigures() {
         const reduceMotion = (typeof window.matchMedia === "function") &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         document.querySelectorAll(".ex-fig").forEach(function (el) {
           const g = exerciseGifs[el.getAttribute("data-ex")];
           if (!g) return;
