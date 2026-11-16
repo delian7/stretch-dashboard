@@ -355,6 +355,28 @@
       .plan-list strong { color: var(--ink); }
       .warm-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 
+    
+      .winddown-plan { display: grid; gap: 22px; }
+      .wd-steps { display: grid; }
+      .wd-step { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; padding: 16px 0; border-top: 1px solid var(--line); }
+      .wd-step:first-of-type { border-top: 0; }
+      .wd-step.is-done h4 { text-decoration: line-through; color: var(--muted); }
+      .wd-num { width: 30px; height: 30px; border-radius: 50%; background: var(--mint); color: var(--moss-dark); font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+      .wd-step h4 { margin: 0 0 4px; font-size: 16px; }
+      .wd-step p { margin: 0 0 6px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+      .wd-step p strong { color: var(--ink); }
+      .wd-time { flex: none; background: var(--mint); color: var(--moss-dark); font-weight: 700; font-size: 12.5px; padding: 6px 10px; border-radius: 999px; white-space: nowrap; }
+      .wd-detail { margin: 8px 0 0; padding-left: 20px; color: var(--muted); line-height: 1.6; font-size: 14px; }
+      .wd-detail li { margin-bottom: 4px; }
+      .gate-callout { margin-top: 12px; background: #fdf3dd; border-radius: 14px; padding: 14px 16px; font-size: 14px; line-height: 1.5; }
+      .gate-callout strong { display: block; margin-bottom: 4px; }
+      .gate-callout p { margin: 0; color: var(--ink); }
+      .sleep-btns { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 4px; }
+      .sleep-btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 8px 14px; font-size: 14px; font-weight: 650; cursor: pointer; }
+      .sleep-btn[aria-pressed="true"] { background: var(--moss); border-color: var(--moss); color: #fff; }
+      .wd-field { display: grid; gap: 6px; margin-top: 12px; font-size: 14px; font-weight: 600; }
+      .wd-field select, .wd-field input { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; background: var(--surface); color: var(--ink); font-weight: 400; }
+
     </style>
   </head>
   <body>
@@ -397,6 +419,7 @@
             <button class="tab" id="morning-tab" role="tab" aria-selected="true" type="button">Morning</button>
             <button class="tab" id="night-tab" role="tab" aria-selected="false" type="button">Night</button>
             <button class="tab" id="workout-tab" role="tab" aria-selected="false" type="button">Workout</button>
+            <button class="tab" id="winddown-tab" role="tab" aria-selected="false" type="button">Wind-down</button>
           </div>
         </div>
 
@@ -512,6 +535,119 @@
           </div>
         </div>
 
+
+
+
+        <div class="winddown-plan hidden" id="winddown-plan">
+          <div class="plan-hero">
+            <div class="eyebrow"><span class="eyebrow-dot"></span><span>10 PM &middot; WIND-DOWN &middot; ONE EVENING, IN ORDER</span></div>
+            <h3>Wind down, then sleep.</h3>
+            <p>Stretches, then mask, then skincare, then ankle light, then lights low &mdash; about 25 minutes, all in one place.</p>
+            <p class="wk-sub" id="winddown-progress">This week: 0 of 7 nights complete &middot; Last sleep: &mdash;</p>
+            <div class="rule-callout">
+              <div class="guard-icon" aria-hidden="true">!</div>
+              <div><strong>The one rule that matters</strong><p>Keep the right ankle neutral and unloaded through the whole evening. Stop any step if you feel sharp pain, joint pinching, new swelling, or numbness &mdash; and the ankle should feel the same the next morning.</p></div>
+            </div>
+          </div>
+
+          <div class="wk-card">
+            <h3> Tonight, in order</h3>
+            <p class="wk-sub">Tick each step off as you finish it. Tonight&rsquo;s ticks are saved on this device.</p>
+            <div class="wd-steps">
+              <div class="wd-step">
+                <span class="wd-num" aria-hidden="true">1</span>
+                <div>
+                  <h4>Night stretches</h4>
+                  <p>Fixed wind-down order from the Night library &mdash; all seated or lying, feet supported, right ankle neutral.</p>
+                  <ul class="wd-detail">
+                    <li>Long-exhale breathing &mdash; 45 sec</li>
+                    <li>Overhead reach &mdash; 45 sec</li>
+                    <li>Single knee-to-chest &mdash; 45 sec</li>
+                    <li>Pelvic tilts &mdash; 45 sec</li>
+                    <li>Legs on the sofa &mdash; 45 sec</li>
+                  </ul>
+                  <p style="margin-top:8px">Optional, only if it feels good: a gentle seated heel-press &mdash; no weight, no machine, no standing. Press the heel lightly into the floor for a few slow breaths. Stop if it hurts.</p>
+                  <div class="warm-actions"><button class="secondary" type="button" data-start-winddown-stretch>Start the 5-min Night stretch</button></div>
+                </div>
+                <div><span class="wd-time">~4 min</span><br><label class="log-check" style="margin-top:10px"><input type="checkbox" data-wd="stretch"> Done</label></div>
+              </div>
+              <div class="wd-step">
+                <span class="wd-num" aria-hidden="true">2</span>
+                <div>
+                  <h4>CryoGlow face</h4>
+                  <p><strong>Shark CryoGlow Clinic Face + Body System (FW575UK) &mdash; Ultimate Anti-Ageing, 6 minutes.</strong> One LED routine per day. Clean, dry, bare skin first; serums and moisturizer go on after, in step 3. Log it in your CryoGlow Routine Tracker too.</p>
+                </div>
+                <div><span class="wd-time">6 min</span><br><label class="log-check" style="margin-top:10px"><input type="checkbox" data-wd="face"> Done</label></div>
+              </div>
+              <div class="wd-step">
+                <span class="wd-num" aria-hidden="true">3</span>
+                <div>
+                  <h4>Skincare</h4>
+                  <p>Serum, then moisturizer. SPF only if you&rsquo;re heading out in daylight &mdash; not at 10 PM.</p>
+                </div>
+                <div><span class="wd-time">2 min</span><br><label class="log-check" style="margin-top:10px"><input type="checkbox" data-wd="skincare"> Done</label></div>
+              </div>
+              <div class="wd-step">
+                <span class="wd-num" aria-hidden="true">4</span>
+                <div>
+                  <h4>CryoGlow body panel &mdash; right ankle</h4>
+                  <p><strong>Ultimate Anti-Ageing, 6 minutes.</strong> Body panel only &mdash; never the face mask on the ankle.</p>
+                  <div class="gate-callout">
+                    <strong>Off-label use &mdash; approved by Dr. Serrano</strong>
+                    <p>Dr. Serrano approved light therapy on Delian&rsquo;s foot on Nov 15, 2026. This step stays gated on that approval.</p>
+                  </div>
+                  <ul class="wd-detail">
+                    <li>Fold the panel sides in, like Hand Mode, to make a narrower cuff.</li>
+                    <li>Main oval panel over the inner / medial ankle, where the talar OLT is; top strip wraps around the front of the ankle and lower shin.</li>
+                    <li>Straps loose-snug, padded bumpers keeping a gap off the skin &mdash; do not press tight.</li>
+                    <li>Bare skin, no sock. Sit still &mdash; do not stand or walk with it on.</li>
+                    <li><strong>No heat, no Dual Temp</strong> on the ankle (Dual Temp is under-eye only).</li>
+                    <li>Stop if pain or swelling increases.</li>
+                  </ul>
+                </div>
+                <div><span class="wd-time">6 min</span><br><label class="log-check" style="margin-top:10px"><input type="checkbox" data-wd="ankle"> Done</label></div>
+              </div>
+              <div class="wd-step">
+                <span class="wd-num" aria-hidden="true">5</span>
+                <div>
+                  <h4>Sleep &mdash; lights low</h4>
+                  <p>Lights low, screens down. Your sleep rating and ankle note are for tomorrow morning &mdash; they live in the Morning check-in below.</p>
+                </div>
+                <div><span class="wd-time">Now</span><br><label class="log-check" style="margin-top:10px"><input type="checkbox" data-wd="sleep"> Done</label></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wk-card">
+            <h3>Morning check-in</h3>
+            <p class="wk-sub">Fill this in when you wake up. It feeds the progress line above and the ankle trend you can show Dr. Serrano at dose 2.</p>
+            <div class="wd-field">How did you sleep last night?
+              <div class="sleep-btns" role="group" aria-label="Sleep rating, 1 to 5">
+                <button class="sleep-btn" type="button" data-sleep="1" aria-pressed="false">1 &middot; Poor</button>
+                <button class="sleep-btn" type="button" data-sleep="2" aria-pressed="false">2</button>
+                <button class="sleep-btn" type="button" data-sleep="3" aria-pressed="false">3 &middot; OK</button>
+                <button class="sleep-btn" type="button" data-sleep="4" aria-pressed="false">4</button>
+                <button class="sleep-btn" type="button" data-sleep="5" aria-pressed="false">5 &middot; Great</button>
+              </div>
+            </div>
+            <label class="wd-field">Ankle this morning
+              <select id="winddown-ankle">
+                <option value="">&mdash;</option>
+                <option value="same">Same as baseline</option>
+                <option value="stiffer">A bit stiffer</option>
+                <option value="worse">More pain or swelling</option>
+              </select>
+            </label>
+            <label class="wd-field">Ankle pain / stiffness note
+              <input type="text" id="winddown-note" placeholder="e.g. stiff after 20 min idle, limped after 25 min walking">
+            </label>
+          </div>
+
+          <div class="wk-card">
+            <h3>Not in this routine</h3>
+            <p class="wk-sub">No calf raises, ankle bands, single-leg balance, bike resistance, running, or jumping &mdash; those need lesion-specific clearance. No heavy or machine leg press &mdash; the only press-like move here is the gentle seated heel-press in step 1.</p>
+          </div>
+        </div>
 
 
         <div class="guardrail">
@@ -706,6 +842,8 @@ const demoGifs = {
       const morningTab = document.getElementById("morning-tab");
       const nightTab = document.getElementById("night-tab");
       const workoutTab = document.getElementById("workout-tab");
+      const winddownTab = document.getElementById("winddown-tab");
+      const winddownPlan = document.getElementById("winddown-plan");
       const workoutPlan = document.getElementById("workout-plan");
       const session = document.getElementById("session");
       let activeView = null;
@@ -792,7 +930,9 @@ const demoGifs = {
         morningTab.setAttribute("aria-selected", String(key === "morning"));
         nightTab.setAttribute("aria-selected", String(key === "night"));
         workoutTab.setAttribute("aria-selected", "false");
+        winddownTab.setAttribute("aria-selected", "false");
         workoutPlan.classList.add("hidden");
+        winddownPlan.classList.add("hidden");
         grid.classList.remove("hidden");
         grid.innerHTML = routine.library.map((step, i) => `
           <article class="stretch-card">
@@ -929,8 +1069,10 @@ const demoGifs = {
         morningTab.setAttribute("aria-selected", "false");
         nightTab.setAttribute("aria-selected", "false");
         workoutTab.setAttribute("aria-selected", "true");
+        winddownTab.setAttribute("aria-selected", "false");
         grid.classList.add("hidden");
         workoutPlan.classList.remove("hidden");
+        winddownPlan.classList.add("hidden");
       }
 
       var WORKOUT_SESSIONS = [
@@ -984,13 +1126,129 @@ const demoGifs = {
         });
       }
 
+      function renderWinddown() {
+        document.getElementById("routine-description").textContent = "One evening, in order: stretches, mask, skincare, ankle light, lights low \u2014 10 PM.";
+        morningTab.setAttribute("aria-selected", "false");
+        nightTab.setAttribute("aria-selected", "false");
+        workoutTab.setAttribute("aria-selected", "false");
+        winddownTab.setAttribute("aria-selected", "true");
+        grid.classList.add("hidden");
+        workoutPlan.classList.add("hidden");
+        winddownPlan.classList.remove("hidden");
+        renderWinddownLog();
+      }
+
+      var WIND_DOWN_STEPS = ["stretch", "face", "skincare", "ankle", "sleep"];
+      var WIND_DOWN_STRETCH_TITLES = ["Long-exhale breathing", "Overhead reach", "Single knee-to-chest", "Pelvic tilts", "Legs on the sofa"];
+      var WIND_DOWN_LOG_KEY = "sd-winddown-log-v1";
+      function winddownDateKey(d) {
+        return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      }
+      function winddownTodayKey() { return winddownDateKey(new Date()); }
+      function loadWinddownLog() {
+        try { return JSON.parse(localStorage.getItem(WIND_DOWN_LOG_KEY) || "{}"); }
+        catch (e) { return {}; }
+      }
+      function saveWinddownLog(log) {
+        try { localStorage.setItem(WIND_DOWN_LOG_KEY, JSON.stringify(log)); } catch (e) {}
+      }
+      function winddownEntry(log, key) {
+        log[key] = log[key] || { steps: {} };
+        log[key].steps = log[key].steps || {};
+        return log[key];
+      }
+      function renderWinddownLog() {
+        var log = loadWinddownLog();
+        var today = winddownTodayKey();
+        var entry = winddownEntry(log, today);
+        Array.prototype.forEach.call(document.querySelectorAll("#winddown-plan input[data-wd]"), function (cb) {
+          var step = cb.getAttribute("data-wd");
+          cb.checked = !!entry.steps[step];
+          var row = cb.closest(".wd-step");
+          if (row) row.classList.toggle("is-done", !!entry.steps[step]);
+        });
+        Array.prototype.forEach.call(document.querySelectorAll("#winddown-plan [data-sleep]"), function (btn) {
+          btn.setAttribute("aria-pressed", String(entry.sleep === btn.getAttribute("data-sleep")));
+        });
+        var ankleSel = document.getElementById("winddown-ankle");
+        if (ankleSel) ankleSel.value = entry.ankle || "";
+        var noteInput = document.getElementById("winddown-note");
+        if (noteInput) noteInput.value = entry.note || "";
+        var weekCount = 0;
+        for (var i = 0; i < 7; i++) {
+          var d = new Date(); d.setDate(d.getDate() - i);
+          var en = log[winddownDateKey(d)];
+          if (en && en.steps && WIND_DOWN_STEPS.every(function (s) { return !!en.steps[s]; })) weekCount++;
+        }
+        var lastSleep = "\u2014";
+        var keys = Object.keys(log).sort().reverse();
+        for (var j = 0; j < keys.length; j++) {
+          if (log[keys[j]].sleep) { lastSleep = log[keys[j]].sleep + " / 5"; break; }
+        }
+        var progress = document.getElementById("winddown-progress");
+        if (progress) progress.textContent = "This week: " + weekCount + " of 7 nights complete \u00b7 Last sleep: " + lastSleep;
+      }
+
+      function openWinddownStretch() {
+        ensureAudio();
+        mountSession();
+        session.style.display = "grid";
+        selectedRoutine = "night";
+        sessionSteps = WIND_DOWN_STRETCH_TITLES.map(function (t) {
+          return routines.night.library.find(function (s) { return s.title === t; });
+        }).filter(Boolean);
+        stepIndex = 0;
+        remaining = sessionSteps[0].seconds;
+        halfwayCuePlayed = false;
+        activeView.classList.remove("hidden");
+        doneView.classList.add("hidden");
+        session.classList.add("open");
+        document.body.style.overflow = "hidden";
+        updateSession();
+        startTimer();
+        document.getElementById("close-session").focus();
+      }
+
       morningTab.addEventListener("click", () => renderRoutine("morning"));
       nightTab.addEventListener("click", () => renderRoutine("night"));
       workoutTab.addEventListener("click", renderWorkout);
+      winddownTab.addEventListener("click", renderWinddown);
+      document.querySelectorAll("[data-start-winddown-stretch]").forEach(function (btn) {
+        btn.addEventListener("click", openWinddownStretch);
+      });
+      document.querySelectorAll("#winddown-plan input[data-wd]").forEach(function (cb) {
+        cb.addEventListener("change", function () {
+          var l = loadWinddownLog();
+          var e = winddownEntry(l, winddownTodayKey());
+          e.steps[cb.getAttribute("data-wd")] = cb.checked;
+          saveWinddownLog(l); renderWinddownLog();
+        });
+      });
+      document.querySelectorAll("#winddown-plan [data-sleep]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var l = loadWinddownLog();
+          var e = winddownEntry(l, winddownTodayKey());
+          e.sleep = btn.getAttribute("data-sleep");
+          saveWinddownLog(l); renderWinddownLog();
+        });
+      });
+      document.getElementById("winddown-ankle").addEventListener("change", function () {
+        var l = loadWinddownLog();
+        var e = winddownEntry(l, winddownTodayKey());
+        e.ankle = this.value;
+        saveWinddownLog(l);
+      });
+      document.getElementById("winddown-note").addEventListener("change", function () {
+        var l = loadWinddownLog();
+        var e = winddownEntry(l, winddownTodayKey());
+        e.note = this.value;
+        saveWinddownLog(l);
+      });
       document.querySelectorAll("[data-start-stretch]").forEach(function (btn) {
         btn.addEventListener("click", function () { openSession(btn.getAttribute("data-start-stretch")); });
       });
       renderWorkoutLog();
+      renderWinddownLog();
       document.getElementById("start-suggested").addEventListener("click", () => openSession(suggestedRoutine));
       session.addEventListener("click", (event) => { if (event.target === session) closeSession(); });
       document.addEventListener("keydown", (event) => { if (event.key === "Escape" && session.classList.contains("open")) closeSession(); });
