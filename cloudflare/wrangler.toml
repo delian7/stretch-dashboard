@@ -1,0 +1,9 @@
+name = "stretch-sync"
+main = "worker.js"
+compatibility_date = "2026-11-16"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "stretch-logs"
+# Fill in after creating the D1 database (dashboard or `wrangler d1 create stretch-logs`).
+database_id = "FILL-IN-AFTER-CREATING-D1"

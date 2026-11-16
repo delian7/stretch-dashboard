@@ -544,6 +544,7 @@
             <h3>Wind down, then sleep.</h3>
             <p>Stretches, then mask, then skincare, then ankle light, then lights low &mdash; about 25 minutes, all in one place.</p>
             <p class="wk-sub" id="winddown-progress">This week: 0 of 7 nights complete &middot; Last sleep: &mdash;</p>
+            <p class="wk-sub" id="sync-status">Sync: checking&hellip;</p>
             <div class="rule-callout">
               <div class="guard-icon" aria-hidden="true">!</div>
               <div><strong>The one rule that matters</strong><p>Keep the right ankle neutral and unloaded through the whole evening. Stop any step if you feel sharp pain, joint pinching, new swelling, or numbness &mdash; and the ankle should feel the same the next morning.</p></div>
@@ -552,7 +553,7 @@
 
           <div class="wk-card">
             <h3> Tonight, in order</h3>
-            <p class="wk-sub">Tick each step off as you finish it. Tonight&rsquo;s ticks are saved on this device.</p>
+            <p class="wk-sub">Tick each step off as you finish it. Tonight&rsquo;s ticks are saved on this device and synced to your Cloudflare log.</p>
             <div class="wd-steps">
               <div class="wd-step">
                 <span class="wd-num" aria-hidden="true">1</span>
@@ -824,6 +825,79 @@ const demoGifs = {
       let soundEnabled = true;
       let audioContext = null;
 
+
+      /* Cloudflare sync: stretch-sync Worker + D1 (stretch-logs).
+         Local-first: localStorage stays the source of truth when offline
+         or unreachable. Writes are debounced; on load, the server value
+         wins only if its updated_at is newer than the last synced one. */
+      var SYNC_URL = "https://stretch-sync.delianpetrov.com/api/log";
+      var SYNC_META_KEY = "sd-sync-meta-v1";
+      var SYNC_TIMERS = {};
+      function syncMeta() {
+        try { return JSON.parse(localStorage.getItem(SYNC_META_KEY) || "{}"); }
+        catch (e) { return {}; }
+      }
+      function saveSyncMeta(m) {
+        try { localStorage.setItem(SYNC_META_KEY, JSON.stringify(m)); } catch (e) {}
+      }
+      function syncAllowedKey(k) {
+        return k === "sd-workout-log-v1" || k === "sd-winddown-log-v1" ||
+          (typeof k === "string" && k.indexOf("sd-session-") === 0);
+      }
+      function syncStatus(text) {
+        var el = document.getElementById("sync-status");
+        if (el) el.textContent = text;
+      }
+      function syncPush(key) {
+        if (!syncAllowedKey(key)) return;
+        if (SYNC_TIMERS[key]) clearTimeout(SYNC_TIMERS[key]);
+        SYNC_TIMERS[key] = setTimeout(function () {
+          var value = null;
+          try { value = localStorage.getItem(key); } catch (e) { return; }
+          if (value === null) return;
+          fetch(SYNC_URL, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ key: key, value: value }) })
+            .then(function (r) { if (!r.ok) throw new Error("sync failed"); return r.json(); })
+            .then(function (d) {
+              if (d && d.updated_at) { var m = syncMeta(); m[key] = d.updated_at; saveSyncMeta(m); }
+              syncStatus("Sync: up to date");
+            })
+            .catch(function () { syncStatus("Sync: offline \u2014 saved on this device"); });
+        }, 800);
+      }
+      function syncPullAll() {
+        var keys = ["sd-workout-log-v1", "sd-winddown-log-v1"];
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && k.indexOf("sd-session-") === 0 && keys.indexOf(k) === -1) keys.push(k);
+        }
+        var changed = false;
+        var failed = false;
+        var pending = keys.length;
+        if (!pending) { syncStatus("Sync: up to date"); return; }
+        keys.forEach(function (key) {
+          fetch(SYNC_URL + "?key=" + encodeURIComponent(key))
+            .then(function (r) { if (r.status === 404) return null; if (!r.ok) throw new Error("no row"); return r.json(); })
+            .then(function (d) {
+              if (d && typeof d.value === "string") {
+                var m = syncMeta();
+                if (d.updated_at > (m[key] || 0)) {
+                  try { localStorage.setItem(key, d.value); } catch (e) {}
+                  m[key] = d.updated_at; saveSyncMeta(m);
+                  changed = true;
+                }
+              }
+            })
+            .catch(function () { failed = true; })
+            .then(function () {
+              pending--;
+              if (pending === 0) {
+                if (changed) { renderWorkoutLog(); renderWinddownLog(); }
+                syncStatus(failed && !changed ? "Sync: offline \u2014 saved on this device" : "Sync: up to date");
+              }
+            });
+        });
+      }
+
       let sessionSteps = [];
       const SESSION_SIZE = 6;
       const SESSION_STRIDE = 5;
@@ -835,6 +909,7 @@ const demoGifs = {
         const steps = [];
         for (let i = 0; i < SESSION_SIZE; i++) steps.push(lib[(offset + i) % lib.length]);
         try { localStorage.setItem("sd-session-" + key, String(n + 1)); } catch (e) {}
+        syncPush("sd-session-" + key);
         return steps;
       }
 
@@ -1095,6 +1170,7 @@ const demoGifs = {
       }
       function saveWorkoutLog(log) {
         try { localStorage.setItem(WORKOUT_LOG_KEY, JSON.stringify(log)); } catch (e) {}
+        syncPush(WORKOUT_LOG_KEY);
       }
       function renderWorkoutLog() {
         var log = loadWorkoutLog();
@@ -1151,6 +1227,7 @@ const demoGifs = {
       }
       function saveWinddownLog(log) {
         try { localStorage.setItem(WIND_DOWN_LOG_KEY, JSON.stringify(log)); } catch (e) {}
+        syncPush(WIND_DOWN_LOG_KEY);
       }
       function winddownEntry(log, key) {
         log[key] = log[key] || { steps: {} };
@@ -1249,6 +1326,7 @@ const demoGifs = {
       });
       renderWorkoutLog();
       renderWinddownLog();
+      syncPullAll();
       document.getElementById("start-suggested").addEventListener("click", () => openSession(suggestedRoutine));
       session.addEventListener("click", (event) => { if (event.target === session) closeSession(); });
       document.addEventListener("keydown", (event) => { if (event.key === "Escape" && session.classList.contains("open")) closeSession(); });
