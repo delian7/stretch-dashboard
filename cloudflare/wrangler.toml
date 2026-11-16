@@ -2,8 +2,11 @@ name = "stretch-sync"
 main = "worker.js"
 compatibility_date = "2026-11-16"
 
+# Custom domain for the sync API (zone delianpetrov.com is on Cloudflare).
+routes = [{ pattern = "stretch-sync.delianpetrov.com", custom_domain = true }]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "stretch-logs"
 # Fill in after creating the D1 database (dashboard or `wrangler d1 create stretch-logs`).
-database_id = "FILL-IN-AFTER-CREATING-D1"
+database_id = "cf5756ed-ccb2-43d9-b2cc-0ac5378cfdd8"
