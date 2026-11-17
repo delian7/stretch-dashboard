@@ -377,6 +377,14 @@
       .wd-field { display: grid; gap: 6px; margin-top: 12px; font-size: 14px; font-weight: 600; }
       .wd-field select, .wd-field input { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; background: var(--surface); color: var(--ink); font-weight: 400; }
 
+    
+      .pt-plan { display: grid; gap: 22px; }
+      .pt-ex { padding: 14px 0; border-top: 1px solid var(--line); }
+      .pt-ex:first-of-type { border-top: 0; }
+      .pt-ex.is-done .ex-name { text-decoration: line-through; color: var(--muted); }
+      .pt-ex .plan-list { margin-top: 6px; }
+      .pt-ex .log-check { margin-top: 10px; }
+
     </style>
   </head>
   <body>
@@ -420,6 +428,7 @@
             <button class="tab" id="night-tab" role="tab" aria-selected="false" type="button">Night</button>
             <button class="tab" id="workout-tab" role="tab" aria-selected="false" type="button">Workout</button>
             <button class="tab" id="winddown-tab" role="tab" aria-selected="false" type="button">Wind-down</button>
+            <button class="tab" id="pt-tab" role="tab" aria-selected="false" type="button">PT</button>
           </div>
         </div>
 
@@ -429,7 +438,7 @@
           <div class="plan-hero">
             <div class="eyebrow"><span class="eyebrow-dot"></span><span>4-WEEK STARTER PLAN &middot; ANKLE-FRIENDLY</span></div>
             <h3>Train around the ankle, not through it.</h3>
-            <p>Two seated strength workouts, alternated across the week. No running, jumping, loaded lunges, deep loaded squats, or unstable-surface balance work &mdash; and no ankle strengthening until your surgeon or physical therapist sets your limits.</p>
+            <p>Two seated strength workouts, alternated across the week. No running, jumping, loaded lunges, deep loaded squats, or unstable-surface balance work. Ankle strengthening now follows your Kaiser MedBridge program &mdash; see the PT tab.</p>
             <div class="rule-callout">
               <div class="guard-icon" aria-hidden="true">!</div>
               <div><strong>The one rule that matters</strong><p>Your ankle should feel the same during the workout and the next morning. More pain, swelling, catching, giving way, or limping means stop or scale back, and contact your care team.</p></div>
@@ -513,7 +522,7 @@
               <div class="sig yellow"><span class="dot"></span><div><strong>Yellow &mdash; stop and scale back</strong><p>Pain rises, swelling appears, or gait worsens. Return to the last comfortable dose once symptoms settle; contact your clinician if it persists.</p></div></div>
               <div class="sig red"><span class="dot"></span><div><strong>Red &mdash; get medical help</strong><p>New inability to bear weight, major swelling, locking, or repeated giving way. Chest pain, severe shortness of breath, or new calf pain/swelling needs prompt evaluation.</p></div></div>
             </div>
-            <p class="wk-sub" style="margin-top:12px">Not progressed here: walking distance, ankle range of motion, calf raises, ankle bands, single-leg balance, bike resistance, running, jumping, or cutting. Those need lesion-specific clearance.</p>
+            <p class="wk-sub" style="margin-top:12px">Still not progressed here: walking distance, bike resistance, running, or cutting. Calf raises, ankle bands (including resisted dorsiflexion), single-leg balance, and jumping are now in the PT tab, exactly as prescribed in your Kaiser MedBridge home program.</p>
           </div>
 
           <div class="wk-card">
@@ -544,6 +553,7 @@
             <h3>Wind down, then sleep.</h3>
             <p>Stretches, then mask, then skincare, then ankle light, then lights low &mdash; about 25 minutes, all in one place.</p>
             <p class="wk-sub" id="winddown-progress">This week: 0 of 7 nights complete &middot; Last sleep: &mdash;</p>
+            <p class="wk-sub" id="sync-status">Sync: checking&hellip;</p>
             <div class="rule-callout">
               <div class="guard-icon" aria-hidden="true">!</div>
               <div><strong>The one rule that matters</strong><p>Keep the right ankle neutral and unloaded through the whole evening. Stop any step if you feel sharp pain, joint pinching, new swelling, or numbness &mdash; and the ankle should feel the same the next morning.</p></div>
@@ -552,7 +562,7 @@
 
           <div class="wk-card">
             <h3> Tonight, in order</h3>
-            <p class="wk-sub">Tick each step off as you finish it. Tonight&rsquo;s ticks are saved on this device.</p>
+            <p class="wk-sub">Tick each step off as you finish it. Tonight&rsquo;s ticks are saved on this device and synced to your Cloudflare log.</p>
             <div class="wd-steps">
               <div class="wd-step">
                 <span class="wd-num" aria-hidden="true">1</span>
@@ -646,6 +656,117 @@
           <div class="wk-card">
             <h3>Not in this routine</h3>
             <p class="wk-sub">No calf raises, ankle bands, single-leg balance, bike resistance, running, or jumping &mdash; those need lesion-specific clearance. No heavy or machine leg press &mdash; the only press-like move here is the gentle seated heel-press in step 1.</p>
+          </div>
+        </div>
+
+
+
+        <div class="pt-plan hidden" id="pt-plan">
+          <div class="plan-hero">
+            <div class="eyebrow"><span class="eyebrow-dot"></span><span>KAISER MEDBRIDGE &middot; HOME PROGRAM &middot; AS PRESCRIBED</span></div>
+            <h3>Your PT program, on the dashboard.</h3>
+            <p>Nine ankle exercises from your Kaiser Permanente Washington MedBridge home program, copied exactly as prescribed &mdash; including the jumping ones, per your call on Nov 16, 2026. No clinician name or program date was shown on the MedBridge page.</p>
+            <p class="wk-sub" id="pt-progress">Logged this week: 0 days</p>
+            <div class="rule-callout">
+              <div class="guard-icon" aria-hidden="true">!</div>
+              <div><strong>The one rule that matters</strong><p>Your ankle should feel the same during each exercise and the next morning. Stop any move if you feel sharp pain, joint pinching, new swelling, or numbness &mdash; and note it in the Wind-down morning check-in so you can show the pattern to your PT or Dr. Serrano.</p></div>
+            </div>
+          </div>
+
+          <div class="wk-card">
+            <h3>What you need</h3>
+            <p class="wk-sub">A resistance band, a foam pad, a sturdy chair, and a wall. Do each group on its prescribed days &mdash; the frequency is on every exercise.</p>
+          </div>
+
+          <div class="wk-card">
+            <h3>Seated band work <span class="wk-chip">4&ndash;5&times; weekly</span></h3>
+            <p class="wk-sub">Sit upright on the floor. All three are 3 sets &times; 15&ndash;20 reps.</p>
+            <div class="pt-ex">
+              <div class="ex-row"><div class="ex-text"><span class="ex-name">Long Sitting Ankle Eversion with Resistance</span><span class="ex-cue">Band around one foot, looped under the other foot, end held in your hand.</span></div><span class="ex-reps">3 &times; 15&ndash;20</span></div>
+              <ul class="plan-list">
+                <li>Rotate the banded ankle <strong>outward</strong>, away from the other foot, then slowly return.</li>
+                <li>Tip: no hip movement &mdash; the motion comes from the ankle only.</li>
+              </ul>
+              <label class="log-check"><input type="checkbox" data-pt="eversion"> Done today</label>
+            </div>
+            <div class="pt-ex">
+              <div class="ex-row"><div class="ex-text"><span class="ex-name">Long Sitting Ankle Inversion with Resistance</span><span class="ex-cue">Legs crossed, band around one foot, looped under the other foot, end held in your hand.</span></div><span class="ex-reps">3 &times; 15&ndash;20</span></div>
+              <ul class="plan-list">
+                <li>Rotate the banded ankle <strong>inward</strong>, away from the other foot, then slowly return.</li>
+                <li>Tip: no hip movement &mdash; the motion comes from the ankle only.</li>
+              </ul>
+              <label class="log-check"><input type="checkbox" data-pt="inversion"> Done today</label>
+            </div>
+            <div class="pt-ex">
+              <div class="ex-row"><div class="ex-text"><span class="ex-name">Seated Ankle Dorsiflexion with Resistance</span><span class="ex-cue">One end of the band anchored under one foot, looped around the top of the other foot.</span></div><span class="ex-reps">3 &times; 15&ndash;20</span></div>
+              <ul class="plan-list">
+                <li>Bend the foot <strong>upward</strong> against the resistance, hold briefly, then slowly lower.</li>
+                <li>Tip: keep both heels on the ground during the exercise.</li>
+              </ul>
+              <label class="log-check"><input type="checkbox" data-pt="dorsiflexion"> Done today</label>
+            </div>
+          </div>
+
+          <div class="wk-card">
+            <h3>Standing calf stretches <span class="wk-chip">Daily</span></h3>
+            <p class="wk-sub">Hands on a wall, one leg back. 3 reps &times; 30-second hold, each leg.</p>
+            <div class="pt-ex">
+              <div class="ex-row"><div class="ex-text"><span class="ex-name">Gastroc Stretch on Wall</span><span class="ex-cue">Back leg straight, front leg bent, until you feel the stretch in the back calf.</span></div><span class="ex-reps">3 &times; 30 sec</span></div>
+              <ul class="plan-list">
+                <li>Hold 30 seconds, return, repeat &mdash; then the other leg.</li>
+                <li>Tip: keep both heels on the ground and the back knee straight.</li>
+              </ul>
+              <label class="log-check"><input type="checkbox" data-pt="gastroc"> Done today</label>
+            </div>
+            <div class="pt-ex">
+              <div class="ex-row"><div class="ex-text"><span class="ex-name">Soleus Stretch on Wall</span><span class="ex-cue">Back leg back with the knee bent; lean into the wall until the lower calf stretches.</span></div><span class="ex-reps">3 &times; 30 sec</span></div>
+              <ul class="plan-list">
+                <li>Hold 30 seconds, return, repeat &mdash; then the other leg.</li>
+                <li>Tip: keep both heels on the ground and the back knee bent.</li>
+              </ul>
+              <label class="log-check"><input type="checkbox" data-pt="soleus"> Done today</label>
+            </div>
+          </div>
+
+          <div class="wk-card">
+            <h3>Balance + heel raises</h3>
+            <p class="wk-sub">Foam pad for the balance work, a chair back for support on the heel raises.</p>
+            <div class="pt-ex">
+              <div class="ex-row"><div class="ex-text"><span class="ex-name">Single Leg Stance on Foam Pad</span><span class="ex-cue">Stand on the foam pad, feet together, arms at your sides; lift one foot and balance on the other.</span></div><span class="ex-reps">2&ndash;3 &times; 30&ndash;45 sec</span></div>
+              <ul class="plan-list">
+                <li><strong>4&ndash;5&times; weekly.</strong> Hold 30&ndash;45 seconds per rep.</li>
+                <li>Tip: don&rsquo;t let your arms drift out or your weight shift side to side.</li>
+              </ul>
+              <label class="log-check"><input type="checkbox" data-pt="sls-foam"> Done today</label>
+            </div>
+            <div class="pt-ex">
+              <div class="ex-row"><div class="ex-text"><span class="ex-name">Tandem Stance on Foam Pad, Eyes Open</span><span class="ex-cue">Heel-to-toe on the foam pad, arms at your sides, back straight.</span></div><span class="ex-reps">2 &times; 30 sec</span></div>
+              <ul class="plan-list">
+                <li><strong>4&times; weekly.</strong> Hold 30 seconds per rep.</li>
+                <li>Tip: don&rsquo;t let your arms drift out; keep your back straight.</li>
+              </ul>
+              <label class="log-check"><input type="checkbox" data-pt="tandem-foam"> Done today</label>
+            </div>
+            <div class="pt-ex">
+              <div class="ex-row"><div class="ex-text"><span class="ex-name">Single Leg Heel Raise with Chair Support</span><span class="ex-cue">Hold a chair back, lift one foot, balance, then slowly raise your heel and lower it back down.</span></div><span class="ex-reps">3 &times; 15</span></div>
+              <ul class="plan-list">
+                <li><strong>4&times; weekly.</strong> Slow up, slow down.</li>
+                <li>Tip: keep your balance and don&rsquo;t let the ankle rotate to either side.</li>
+              </ul>
+              <label class="log-check"><input type="checkbox" data-pt="heel-raise"> Done today</label>
+            </div>
+          </div>
+
+          <div class="wk-card">
+            <h3>Pogo Jumps <span class="wk-chip">2&times; weekly</span></h3>
+            <p class="wk-sub">3 sets &times; 10&ndash;15 reps. Feet a comfortable distance apart, jump high without bending the knees much, land on the balls of your feet and jump again immediately &mdash; as little ground time as possible, arms for momentum as needed.</p>
+            <div class="gate-callout">
+              <strong>Prescribed &mdash; and it loads the ankle</strong>
+              <p>Jumping and single-leg loading were not part of the earlier ankle-quiet plan; they are here because your Kaiser MedBridge program prescribes them and you asked for them included. Do them only on their 2&times;-weekly days, and skip them &mdash; and tell your PT or Dr. Serrano &mdash; if the ankle flares the next morning.</p>
+            </div>
+            <div class="pt-ex" style="border-top:0">
+              <label class="log-check"><input type="checkbox" data-pt="pogo"> Done today</label>
+            </div>
           </div>
         </div>
 
@@ -824,6 +945,79 @@ const demoGifs = {
       let soundEnabled = true;
       let audioContext = null;
 
+
+      /* Cloudflare sync: stretch-sync Worker + D1 (stretch-logs).
+         Local-first: localStorage stays the source of truth when offline
+         or unreachable. Writes are debounced; on load, the server value
+         wins only if its updated_at is newer than the last synced one. */
+      var SYNC_URL = "https://stretch-sync.delianpetrov.com/api/log";
+      var SYNC_META_KEY = "sd-sync-meta-v1";
+      var SYNC_TIMERS = {};
+      function syncMeta() {
+        try { return JSON.parse(localStorage.getItem(SYNC_META_KEY) || "{}"); }
+        catch (e) { return {}; }
+      }
+      function saveSyncMeta(m) {
+        try { localStorage.setItem(SYNC_META_KEY, JSON.stringify(m)); } catch (e) {}
+      }
+      function syncAllowedKey(k) {
+        return k === "sd-workout-log-v1" || k === "sd-winddown-log-v1" || k === "sd-pt-log-v1" ||
+          (typeof k === "string" && k.indexOf("sd-session-") === 0);
+      }
+      function syncStatus(text) {
+        var el = document.getElementById("sync-status");
+        if (el) el.textContent = text;
+      }
+      function syncPush(key) {
+        if (!syncAllowedKey(key)) return;
+        if (SYNC_TIMERS[key]) clearTimeout(SYNC_TIMERS[key]);
+        SYNC_TIMERS[key] = setTimeout(function () {
+          var value = null;
+          try { value = localStorage.getItem(key); } catch (e) { return; }
+          if (value === null) return;
+          fetch(SYNC_URL, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify({ key: key, value: value }) })
+            .then(function (r) { if (!r.ok) throw new Error("sync failed"); return r.json(); })
+            .then(function (d) {
+              if (d && d.updated_at) { var m = syncMeta(); m[key] = d.updated_at; saveSyncMeta(m); }
+              syncStatus("Sync: up to date");
+            })
+            .catch(function () { syncStatus("Sync: offline \u2014 saved on this device"); });
+        }, 800);
+      }
+      function syncPullAll() {
+        var keys = ["sd-workout-log-v1", "sd-winddown-log-v1", "sd-pt-log-v1"];
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && k.indexOf("sd-session-") === 0 && keys.indexOf(k) === -1) keys.push(k);
+        }
+        var changed = false;
+        var failed = false;
+        var pending = keys.length;
+        if (!pending) { syncStatus("Sync: up to date"); return; }
+        keys.forEach(function (key) {
+          fetch(SYNC_URL + "?key=" + encodeURIComponent(key))
+            .then(function (r) { if (r.status === 404) return null; if (!r.ok) throw new Error("no row"); return r.json(); })
+            .then(function (d) {
+              if (d && typeof d.value === "string") {
+                var m = syncMeta();
+                if (d.updated_at > (m[key] || 0)) {
+                  try { localStorage.setItem(key, d.value); } catch (e) {}
+                  m[key] = d.updated_at; saveSyncMeta(m);
+                  changed = true;
+                }
+              }
+            })
+            .catch(function () { failed = true; })
+            .then(function () {
+              pending--;
+              if (pending === 0) {
+                if (changed) { renderWorkoutLog(); renderWinddownLog(); renderPtLog(); }
+                syncStatus(failed && !changed ? "Sync: offline \u2014 saved on this device" : "Sync: up to date");
+              }
+            });
+        });
+      }
+
       let sessionSteps = [];
       const SESSION_SIZE = 6;
       const SESSION_STRIDE = 5;
@@ -835,6 +1029,7 @@ const demoGifs = {
         const steps = [];
         for (let i = 0; i < SESSION_SIZE; i++) steps.push(lib[(offset + i) % lib.length]);
         try { localStorage.setItem("sd-session-" + key, String(n + 1)); } catch (e) {}
+        syncPush("sd-session-" + key);
         return steps;
       }
 
@@ -844,6 +1039,8 @@ const demoGifs = {
       const workoutTab = document.getElementById("workout-tab");
       const winddownTab = document.getElementById("winddown-tab");
       const winddownPlan = document.getElementById("winddown-plan");
+      const ptTab = document.getElementById("pt-tab");
+      const ptPlan = document.getElementById("pt-plan");
       const workoutPlan = document.getElementById("workout-plan");
       const session = document.getElementById("session");
       let activeView = null;
@@ -931,8 +1128,10 @@ const demoGifs = {
         nightTab.setAttribute("aria-selected", String(key === "night"));
         workoutTab.setAttribute("aria-selected", "false");
         winddownTab.setAttribute("aria-selected", "false");
+        ptTab.setAttribute("aria-selected", "false");
         workoutPlan.classList.add("hidden");
         winddownPlan.classList.add("hidden");
+        ptPlan.classList.add("hidden");
         grid.classList.remove("hidden");
         grid.innerHTML = routine.library.map((step, i) => `
           <article class="stretch-card">
@@ -1070,9 +1269,11 @@ const demoGifs = {
         nightTab.setAttribute("aria-selected", "false");
         workoutTab.setAttribute("aria-selected", "true");
         winddownTab.setAttribute("aria-selected", "false");
+        ptTab.setAttribute("aria-selected", "false");
         grid.classList.add("hidden");
         workoutPlan.classList.remove("hidden");
         winddownPlan.classList.add("hidden");
+        ptPlan.classList.add("hidden");
       }
 
       var WORKOUT_SESSIONS = [
@@ -1095,6 +1296,7 @@ const demoGifs = {
       }
       function saveWorkoutLog(log) {
         try { localStorage.setItem(WORKOUT_LOG_KEY, JSON.stringify(log)); } catch (e) {}
+        syncPush(WORKOUT_LOG_KEY);
       }
       function renderWorkoutLog() {
         var log = loadWorkoutLog();
@@ -1132,9 +1334,11 @@ const demoGifs = {
         nightTab.setAttribute("aria-selected", "false");
         workoutTab.setAttribute("aria-selected", "false");
         winddownTab.setAttribute("aria-selected", "true");
+        ptTab.setAttribute("aria-selected", "false");
         grid.classList.add("hidden");
         workoutPlan.classList.add("hidden");
         winddownPlan.classList.remove("hidden");
+        ptPlan.classList.add("hidden");
         renderWinddownLog();
       }
 
@@ -1151,6 +1355,7 @@ const demoGifs = {
       }
       function saveWinddownLog(log) {
         try { localStorage.setItem(WIND_DOWN_LOG_KEY, JSON.stringify(log)); } catch (e) {}
+        syncPush(WIND_DOWN_LOG_KEY);
       }
       function winddownEntry(log, key) {
         log[key] = log[key] || { steps: {} };
@@ -1212,7 +1417,65 @@ const demoGifs = {
       morningTab.addEventListener("click", () => renderRoutine("morning"));
       nightTab.addEventListener("click", () => renderRoutine("night"));
       workoutTab.addEventListener("click", renderWorkout);
+      function renderPt() {
+        document.getElementById("routine-description").textContent = "Kaiser MedBridge home program \u2014 9 ankle exercises, as prescribed.";
+        morningTab.setAttribute("aria-selected", "false");
+        nightTab.setAttribute("aria-selected", "false");
+        workoutTab.setAttribute("aria-selected", "false");
+        winddownTab.setAttribute("aria-selected", "false");
+        ptTab.setAttribute("aria-selected", "true");
+        grid.classList.add("hidden");
+        workoutPlan.classList.add("hidden");
+        winddownPlan.classList.add("hidden");
+        ptPlan.classList.remove("hidden");
+        renderPtLog();
+      }
+
+      var PT_EXERCISES = ["eversion", "inversion", "dorsiflexion", "gastroc", "soleus", "sls-foam", "tandem-foam", "heel-raise", "pogo"];
+      var PT_LOG_KEY = "sd-pt-log-v1";
+      function loadPtLog() {
+        try { return JSON.parse(localStorage.getItem(PT_LOG_KEY) || "{}"); }
+        catch (e) { return {}; }
+      }
+      function savePtLog(log) {
+        try { localStorage.setItem(PT_LOG_KEY, JSON.stringify(log)); } catch (e) {}
+        syncPush(PT_LOG_KEY);
+      }
+      function ptEntry(log, key) {
+        log[key] = log[key] || { steps: {} };
+        log[key].steps = log[key].steps || {};
+        return log[key];
+      }
+      function renderPtLog() {
+        var log = loadPtLog();
+        var today = winddownTodayKey();
+        var entry = ptEntry(log, today);
+        Array.prototype.forEach.call(document.querySelectorAll("#pt-plan input[data-pt]"), function (cb) {
+          var step = cb.getAttribute("data-pt");
+          cb.checked = !!entry.steps[step];
+          var row = cb.closest(".pt-ex");
+          if (row) row.classList.toggle("is-done", !!entry.steps[step]);
+        });
+        var days = 0;
+        for (var i = 0; i < 7; i++) {
+          var d = new Date(); d.setDate(d.getDate() - i);
+          var en = log[winddownDateKey(d)];
+          if (en && en.steps && PT_EXERCISES.some(function (s) { return !!en.steps[s]; })) days++;
+        }
+        var progress = document.getElementById("pt-progress");
+        if (progress) progress.textContent = "Logged this week: " + days + (days === 1 ? " day" : " days");
+      }
+
       winddownTab.addEventListener("click", renderWinddown);
+      ptTab.addEventListener("click", renderPt);
+      document.querySelectorAll("#pt-plan input[data-pt]").forEach(function (cb) {
+        cb.addEventListener("change", function () {
+          var l = loadPtLog();
+          var e = ptEntry(l, winddownTodayKey());
+          e.steps[cb.getAttribute("data-pt")] = cb.checked;
+          savePtLog(l); renderPtLog();
+        });
+      });
       document.querySelectorAll("[data-start-winddown-stretch]").forEach(function (btn) {
         btn.addEventListener("click", openWinddownStretch);
       });
@@ -1249,6 +1512,8 @@ const demoGifs = {
       });
       renderWorkoutLog();
       renderWinddownLog();
+      renderPtLog();
+      syncPullAll();
       document.getElementById("start-suggested").addEventListener("click", () => openSession(suggestedRoutine));
       session.addEventListener("click", (event) => { if (event.target === session) closeSession(); });
       document.addEventListener("keydown", (event) => { if (event.key === "Escape" && session.classList.contains("open")) closeSession(); });
